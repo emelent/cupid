@@ -3,6 +3,9 @@ local player = {
   direction = 0,
   damageDealt = false,
   speed = 150,
+  gravity = 400,
+  jumpForce = 100,
+  ground = 500,
   state = 'idle',
   smAction = state_machine.newFSM(),
   position = {
@@ -127,6 +130,28 @@ function player.load()
       {3,6,6,6, 0.1}
     }
   })
+
+  sprite:addAnimation('crouch', {
+    image = image,
+    frameWidth = 48,
+    frameHeight = 48,
+    stopAtEnd = true,
+    frames = {
+      {1,11,1,11, 0.1}
+    }
+  })
+
+  sprite:addAnimation('jump', {
+    image = image,
+    frameWidth = 48,
+    frameHeight = 48,
+    stopAtEnd = true,
+    frames = {
+      {2,11,2,11, 0.1}
+    }
+  })
+
+
 --set image scale
   sprite.sx = player.scale.x
   sprite.sy = player.scale.y
@@ -138,6 +163,8 @@ function player.load()
   player.smAction:loadState('walk', require(states_dir .. 'walk'), {player = player})
   player.smAction:loadState('slash', require(states_dir .. 'slash'), {player = player})
   player.smAction:loadState('block', require(states_dir .. 'block'), {player = player})
+  player.smAction:loadState('crouch', require(states_dir .. 'crouch'), {player = player})
+  player.smAction:loadState('jump', require(states_dir .. 'jump'), {player = player})
 
   -- start off in idle state
   player.smAction:setState('idle')

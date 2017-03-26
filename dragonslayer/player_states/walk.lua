@@ -33,6 +33,8 @@ function walk.keypressed(key, code)
   elseif key == 'down' then
   elseif key == 's' then
     fsm:setState('crouch')
+  elseif key == 'w' then
+    fsm:setState('jump')
 	end
 end
 
