@@ -5,6 +5,14 @@ sodapop = require('lib/sodapop')
 state_machine = require('state_machine')
 local player = require('player')
 
+--debug flag
+debug = true
+
+function debug_print(tag, message)
+  if debug then
+    print(string.format('[DEBUG:%s] %s',tag, message))
+  end
+end
 
 function love.load()
   --love.graphics.setBackgroundColor(255,255,255)
