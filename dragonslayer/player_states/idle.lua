@@ -39,7 +39,4 @@ function idle.keypressed(key, code)
 	end
 end
 
-function idle.keyreleased(key, code)
-end
-
 return idle
