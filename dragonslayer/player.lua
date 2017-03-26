@@ -2,6 +2,7 @@ local player = {
   image = nil,
   direction = 0,
   damageDealt = false,
+  dashDist = 200,
   speed = 150,
   gravity = 400,
   jumpForce = 100,
@@ -102,9 +103,8 @@ function player.load()
     frameWidth = 48,
     frameHeight = 48,
     stopAtEnd = true,
-    onReachedEnd = switchToNextState,
     frames = {
-      {1,5,6,5, 0.05}
+      {1,5,6,5, 0.01}
     }
   })
   sprite:addAnimation('block', {
@@ -165,6 +165,7 @@ function player.load()
   player.smAction:loadState('block', require(states_dir .. 'block'), {player = player})
   player.smAction:loadState('crouch', require(states_dir .. 'crouch'), {player = player})
   player.smAction:loadState('jump', require(states_dir .. 'jump'), {player = player})
+  player.smAction:loadState('dash', require(states_dir .. 'dash'), {player = player})
 
   -- start off in idle state
   player.smAction:setState('idle')

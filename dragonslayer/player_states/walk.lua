@@ -28,6 +28,7 @@ function walk.keypressed(key, code)
 	if key == 'left' then
 		fsm:setState('slash', {direction = player.direction, ending=true})
   elseif key == 'right' then
+    fsm:setState('dash', {direction = player.direction})
   elseif key == 'up' then
     fsm:setState('block')
   elseif key == 'down' then
