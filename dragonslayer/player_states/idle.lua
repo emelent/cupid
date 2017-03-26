@@ -25,16 +25,16 @@ function idle.update(dt)
   elseif player.direction < 0 then
     player.position.x = player.position.x - player.speed * dt
   end
-
-  if love.keyboard.isDown('a', 'left') then
-  	fsm:setState('walking', {direction = -1})
-  elseif love.keyboard.isDown('d', 'right') then
-  	fsm:setState('walking', {direction = 1})
-  end
 end
 
 function idle.keypressed(key, code)
-	-- add other state switches
+	if key == 'left' then
+		fsm:setState('slash', {direction = player.direction})
+  elseif key == 'a' then
+  	fsm:setState('walk', {direction = -1})
+  elseif key == 'd' then
+  	fsm:setState('walk', {direction = 1})
+	end
 end
 
 function idle.keyreleased(key, code)

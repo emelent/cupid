@@ -34,6 +34,12 @@ function player.load()
     return player.position.x, player.position.y 
   end)
 
+  local endOfSlash = function()
+    player.smAction:setState(
+      player.smAction.current_state.next_state, 
+      player.smAction.current_state.next_args
+    )
+  end
   --Add animations
   sprite:addAnimation('idle', {
     image = image,
@@ -43,7 +49,7 @@ function player.load()
       {1, 1, 6, 1, .15}
     }
   })
-  sprite:addAnimation('walking', {
+  sprite:addAnimation('walk', {
     image = image,
     frameWidth = 48,
     frameHeight = 48,
@@ -56,45 +62,37 @@ function player.load()
     frameWidth = 48,
     frameHeight = 48,
     stopAtEnd    = true,
-    onReachedEnd = function()
-      player.smAction:setState('idle')
-    end,
+    onReachedEnd = endOfSlash,
     frames = {
       {1, 3, 6, 3, .08}
     }
   })
-  sprite:addAnimation('end-slash', {
+  sprite:addAnimation('end_slash', {
     image = image,
     frameWidth = 48,
     frameHeight = 48,
     stopAtEnd = true,
-    onReachedEnd = function()
-      player.smAction:setState('idle')
-    end,
+    onReachedEnd = endOfSlash,
     frames = {
       {4,3,6,3, 0.1}
     }
   })
-  sprite:addAnimation('power-slash', {
+  sprite:addAnimation('power_slash', {
     image = image,
     frameWidth = 48,
     frameHeight = 48,
     stopAtEnd    = true,
-    onReachedEnd = function() 
-      player.smAction:setState('idle')
-    end,
+    onReachedEnd = endOfSlash,
     frames = {
       {1, 4, 6, 4, .08}
     }
   })
-  sprite:addAnimation('end-power-slash', {
+  sprite:addAnimation('end_power_slash', {
     image = image,
     frameWidth = 48,
     frameHeight = 48,
     stopAtEnd = true,
-    onReachedEnd = function()
-      player.smAction:setState('idle')
-    end,
+    onReachedEnd = endOfSlash,
     frames = {
       {4,4,6,4, 0.1}
     }
@@ -107,8 +105,8 @@ function player.load()
 --load states
   local states_dir = 'player_states/'
   player.smAction:loadState('idle', require(states_dir .. 'idle'), {player = player})
-  player.smAction:loadState('walking', require(states_dir .. 'walking'), {player = player})
-
+  player.smAction:loadState('walk', require(states_dir .. 'walk'), {player = player})
+  player.smAction:loadState('slash', require(states_dir .. 'slash'), {player = player})
   -- start off in idle state
   player.smAction:setState('idle')
 end
