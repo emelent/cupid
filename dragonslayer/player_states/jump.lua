@@ -5,7 +5,9 @@ local jump = {
 
 local player
 local fsm
+local speed_y = 0
 
+local tag = 'JMP'
 function jump.load(...)
 	local params = ...
 	player = params.player
@@ -15,19 +17,20 @@ end
 function jump.enter(prev_state, ...)
 	local params = ...
 	player.sprite:switch('jump')
-  player.position.y = player.position.y - player.jumpForce
+  speed_y = -player.jumpForce
 end
 
 function jump.exit()
 	jump.next_args = {}
 	jump.next_state = 'idle'
+  speed_y = 0
 end
 
 function jump.update(dt)
+  speed_y = speed_y + (player.gravity * dt)
   player.position.x = player.position.x + (player.direction * player.speed * dt)
-  if player.position.y < player.ground then
-    player.position.y = player.position.y + (player.gravity * dt)
-  else
+  player.position.y = player.position.y + (speed_y * dt)
+  if player.position.y > player.ground then
     player.position.y = player.ground
     if player.direction == 0 then
       fsm:setState('idle')
