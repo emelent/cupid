@@ -52,9 +52,4 @@ function slash.keyreleased(key, code)
 	end
 end
 
-function slash.keypressed(key, code)
-	-- if key == 'space' then
-	-- 	fsm:setState('slash', {direction = direction, ending=true})
-	-- end
-end	
 return slash
