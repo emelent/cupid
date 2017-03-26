@@ -1,4 +1,4 @@
-local fsm = {
+local StateMachine = {
   loaded = {},
   current_state = nil
 }
@@ -15,20 +15,28 @@ local function get_key_for_value(table, value)
   return nil
 end
 
-function fsm:loadState(state_name, state, ...)
-  self.loaded[state_name] = state
-  self.stateEvent('load', ...)
+function StateMachine:new()
+  setmetatable({}, StateMachine)
+  return self
 end
 
-function fsm:setState(state_name, ...)
-  self.stateEvent('exit')
+function StateMachine:loadState(state_name, state, ...)
+  self.loaded[state_name] = state
+  if state.load and type(state.load) == 'function' then
+    print('Loading', state_name)
+    state.load(...)
+  end
+end
+
+function StateMachine:setState(state_name, ...)
+  self:stateEvent('exit')
   local prev_state_name = get_key_for_value(self.loaded, self.current_state)
   self.current_state = self.loaded[state_name]
   assert(self.current_state, 'Invalid state name')
-  self.stateEvent('enter', prev_state_name, ...)
+  self:stateEvent('enter', prev_state_name, ...)
 end
 
-function fsm:stateEvent(function_name, ...)
+function StateMachine:stateEvent(function_name, ...)
   if self.current_state and type(self.current_state[function_name]) == 'function' then
     self.current_state[function_name](...)
   end
@@ -36,6 +44,6 @@ end
 
 return {
   newFSM = function() 
-    return fsm.new()
+    return StateMachine:new()
   end
 }
