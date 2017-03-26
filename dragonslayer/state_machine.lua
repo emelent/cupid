@@ -3,6 +3,7 @@ local StateMachine = {
   current_state = nil
 }
 
+local tag = 'SM'
 local function get_key_for_value(table, value)
   if value == nil then
     return nil
@@ -23,7 +24,7 @@ end
 function StateMachine:loadState(state_name, state, ...)
   self.loaded[state_name] = state
   if state.load and type(state.load) == 'function' then
-    print('Loading', state_name)
+    debug_print(tag, string.format("Loading '%s' state", state_name))
     state.load(...)
   end
 end
@@ -32,7 +33,8 @@ function StateMachine:setState(state_name, ...)
   self:stateEvent('exit')
   local prev_state_name = get_key_for_value(self.loaded, self.current_state)
   self.current_state = self.loaded[state_name]
-  assert(self.current_state, 'Invalid state name')
+  assert(self.current_state, string.format("Invalid state '%s'", state_name))
+  debug_print(tag, string.format('Entering %s', state_name))
   self:stateEvent('enter', prev_state_name, ...)
 end
 
