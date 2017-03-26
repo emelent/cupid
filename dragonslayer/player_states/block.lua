@@ -5,7 +5,6 @@ local block = {
 
 local player
 local fsm
-local direction = 0
 
 function block.load(...)
 	local params = ...
@@ -15,12 +14,13 @@ end
 
 function block.enter(prev_state, ...)
 	local params = ...
+
+  --stop player motion
   player.direction = 0
 	player.sprite:switch('block')
 end
 
 function block.exit()
-	direction = 0
 	block.next_args = {}
 	block.next_state = 'idle'
 end
@@ -38,6 +38,8 @@ function block.keyreleased(key, code)
       fsm:setState('walk', {direction=-1})
     elseif love.keyboard.isDown('d') then
       fsm:setState('walk', {direction=1})
+    elseif love.keyboard.isDown('s') then
+      fsm:setState('crouch')
     else
       fsm:setState('idle')
     end

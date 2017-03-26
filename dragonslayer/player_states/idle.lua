@@ -34,6 +34,9 @@ function idle.keypressed(key, code)
   	fsm:setState('walk', {direction = -1})
   elseif key == 'd' then
   	fsm:setState('walk', {direction = 1})
+  elseif key == 's' then
+    fsm:setState('crouch')
+
   elseif key == 'up' then
     fsm:setState('block')
 	end
