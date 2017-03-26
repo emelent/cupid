@@ -1,11 +1,13 @@
 
 sodapop = require('lib/sodapop')
 --local suit = require('lib/suit')
-
+--
+state_machine = require('state_machine')
 local player = require('player')
 
 
 function love.load()
+  --love.graphics.setBackgroundColor(255,255,255)
   player.load()
 end
 
