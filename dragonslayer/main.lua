@@ -1,9 +1,9 @@
 
 sodapop = require('lib.sodapop')
+timer = require('lib.hump.timer')
 --local suit = require('lib/suit')
 --
 state_machine = require('state_machine')
-timer = require('lib.hump.timer')
 local player = require('player')
 
 --debug flag

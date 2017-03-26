@@ -2,7 +2,7 @@ local player = {
   image = nil,
   direction = 0,
   damageDealt = false,
-  dashDist = 200,
+  dashFactor = 20,
   speed = 150,
   gravity = 400,
   jumpForce = 100,
@@ -104,7 +104,17 @@ function player.load()
     frameHeight = 48,
     stopAtEnd = true,
     frames = {
-      {1,5,6,5, 0.01}
+      {1,5,3,5, 0.05}
+    }
+  })
+  sprite:addAnimation('end_dash', {
+    image = image,
+    frameWidth = 48,
+    frameHeight = 48,
+    onReachedEnd = switchToNextState,
+    stopAtEnd = true,
+    frames = {
+      {3,5,6,5, 0.05}
     }
   })
   sprite:addAnimation('block', {
