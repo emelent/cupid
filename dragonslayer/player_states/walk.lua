@@ -11,6 +11,7 @@ end
 function walk.enter(prev_state, ...)
 	local params = ...
 	player.direction = params.direction 
+  player.velocity.x = (player.direction * player.speed)
 	player.sprite.flipX = (player.direction < 0)
 	player.sprite:switch('walk')
 end
@@ -18,10 +19,7 @@ end
 function walk.exit()
 	-- stop moving
 	player.direction = 0
-end
-
-function walk.update(dt)
-	player.position.x = player.position.x + (player.direction * player.speed * dt)
+  player.velocity.x = 0
 end
 
 function walk.keypressed(key, code)

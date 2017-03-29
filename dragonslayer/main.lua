@@ -1,13 +1,19 @@
 
 sodapop = require('lib.sodapop')
 timer = require('lib.hump.timer')
---local suit = require('lib/suit')
---
+vector = require('lib.hump.vector')
 state_machine = require('state_machine')
+
+local tiny = require('lib.tiny')
 local player = require('player')
 
+
+local sysCollision
+local entWorld
+local bumpWorld
+
 --debug flag
-debug = true
+local debug = true
 
 function debug_print(tag, message)
   if debug then
@@ -16,8 +22,36 @@ function debug_print(tag, message)
 end
 
 function love.load()
-  --love.graphics.setBackgroundColor(255,255,255)
   player.load()
+
+  sysCollision = tiny.processingSystem()
+  sysCollision.filter = tiny.requireAll(
+    'position', 
+    'velocity', 
+    'hitbox'
+  )
+
+  function sysCollision:process(ent, dt)
+    --update entity hitbox
+    bumpWorld:update(item, table:unpack(ent.hitbox))
+
+    --check for collisions
+    
+  end
+
+  function sysCollision:onAdd(ent)
+    --add entity to physics world
+    bumpWorld.add(ent, table:unpack(ent.hitbox))
+  end
+
+  function sysCollision:onRemove(ent)
+    --remove entity from physics world
+    bumpWorld.remove(ent)
+  end
+
+  entWorld =  tiny.world()
+  entWorld:addSystem(sysCollision)
+
 end
 
 function love.update(dt)
