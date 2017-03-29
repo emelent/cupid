@@ -6,7 +6,6 @@ local player = {
   speed = 150,
   gravity = false,
   jumpForce = 800,
-  ground = 500,
   state = 'idle',
   group = 'Player',
   smAction = state_machine.newFSM(),
@@ -19,8 +18,8 @@ local player = {
     h = 48
   },
   scale= {
-    x = 1,
-    y = 1 
+    x = 3,
+    y = 3 
   },
 }
 
