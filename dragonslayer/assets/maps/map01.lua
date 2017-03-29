@@ -1,0 +1,221 @@
+return {
+  version = "1.1",
+  luaversion = "5.1",
+  tiledversion = "0.14.2",
+  orientation = "orthogonal",
+  renderorder = "right-up",
+  width = 30,
+  height = 30,
+  tilewidth = 32,
+  tileheight = 32,
+  nextobjectid = 44,
+  properties = {},
+  tilesets = {
+    {
+      name = "Tile",
+      firstgid = 1,
+      tilewidth = 32,
+      tileheight = 32,
+      spacing = 0,
+      margin = 0,
+      image = "../images/tiles/Tile.png",
+      imagewidth = 224,
+      imageheight = 576,
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      properties = {},
+      terrains = {},
+      tilecount = 126,
+      tiles = {}
+    }
+  },
+  layers = {
+    {
+      type = "tilelayer",
+      name = "Platforms",
+      x = 0,
+      y = 0,
+      width = 30,
+      height = 30,
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      properties = {},
+      encoding = "base64",
+      compression = "zlib",
+      data = "eJwTYBgFo2AUjIJRMApQgQAUkwIkgViBQnuZoJgUoEChvQJI9grgwdQGTETiwQRoFRaEAD3DAjnO8aULaoOhmB4GAtA6HnCB0XigPiCmvMWnhlQMA/jylxgUE5sfScmz1DST2vYCAOCYBJQ="
+    },
+    {
+      type = "objectgroup",
+      name = "Shapes",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      properties = {
+        ["collidable"] = true
+      },
+      objects = {
+        {
+          id = 26,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 0,
+          y = 864,
+          width = 608,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 27,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 576,
+          y = 896,
+          width = 32,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 29,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 672,
+          y = 832,
+          width = 224,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 30,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 896,
+          y = 864,
+          width = 64,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 31,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 832,
+          y = 704,
+          width = 128,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 32,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 384,
+          y = 608,
+          width = 96,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 33,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 544,
+          y = 608,
+          width = 160,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 34,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 96,
+          y = 480,
+          width = 224,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 35,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 0,
+          y = 480,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 37,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 32,
+          y = 416,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 38,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 480,
+          y = 544,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 41,
+          name = "Player",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 448,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
+    }
+  }
+}
