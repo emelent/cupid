@@ -34,7 +34,7 @@ function slash.exit()
 end
 
 function slash.update(dt)
-	player.position.x = player.position.x + (direction * player.speed * dt)
+	player.velocity.x = (direction * player.speed)
 	if love.keyboard.isDown('a') then
 		slash.next_state = 'walk'
 		slash.next_args = {direction = -1}
