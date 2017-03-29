@@ -9,10 +9,8 @@ local player = {
   ground = 500,
   state = 'idle',
   smAction = state_machine.newFSM(),
-  position = {
-    x = 600,
-    y = 500
-  },
+  position = vector(600, 500),
+  velocity = vector(0, 0),
   scale= {
     x = 3,
     y = 3 
@@ -182,6 +180,7 @@ function player.load()
 end
 
 function player.update(dt)
+  player.position = player.position + (player.velocity * dt)
   player.sprite:update(dt)
   player.smAction:stateEvent('update', dt)
 end
