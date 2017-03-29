@@ -3,16 +3,17 @@ sodapop = require('lib.sodapop')
 timer = require('lib.hump.timer')
 vector = require('lib.hump.vector')
 state_machine = require('state_machine')
+tiny = require('lib.tiny')
 
 local bump = require('lib.bump')
-local tiny = require('lib.tiny')
 local player = require('player')
 
 
-local MotionSystem
-local entWorld
-local bumpWorld
+local systems
+
+bumpWorld = nil
 local ground = {
+  group = 'Ground',
   hitbox =  {
     x = 0,
     y = 550,
@@ -34,61 +35,12 @@ function love.load()
   -- Prepare world
   bumpWorld = bump.newWorld(50)
 
-  --Setup Motion System
-  MotionSystem = tiny.processingSystem()
-    MotionSystem.filter = tiny.requireAll(
-      'position', 
-      'velocity', 
-      'hitbox'
-    )
-
-    function MotionSystem:onAdd(ent)
-      --add entity to physics world
-      bumpWorld:add(
-        ent, 
-        ent.hitbox.x,
-        ent.hitbox.y,
-        ent.hitbox.w,
-        ent.hitbox.h
-      )
-    end
-
-    function MotionSystem:onRemove(ent)
-      --remove entity from physics world
-      bumpWorld:remove(ent)
-    end
-
-    function MotionSystem:process(ent, dt)
-      --update entity hitbox
-      bumpWorld:update(
-        ent, 
-        ent.hitbox.x,
-        ent.hitbox.y,
-        ent.hitbox.w,
-        ent.hitbox.h
-      )
-
-      --try to move player to destination, and handle collisions
-      local pos = ent.position
-      local filter = function(item, other)
-        return 'bounce'
-      end
-
-      local actualX, actualY, cols, len = bumpWorld:move(ent, pos.x, pos.y, filter)
-      --set new collision position
-      ent.position.x = actualX
-      ent.position.y = actualY
-
-      for i=1, len do
-        debug_print('MotionSysem', 'Collided with ' .. tostring(cols[i].other))
-      end
-      
-        
-    end
-
   -- Setup systems
-  entWorld =  tiny.world()
-  entWorld:addSystem(MotionSystem)
+  local MotionSystem = require('systems.motion')
+  --local GravitySystem = require('systems.motion')
+  
+  systems =  tiny.world()
+  systems:addSystem(MotionSystem)
 
   -- add ground to world
   bumpWorld:add(
@@ -103,13 +55,13 @@ function love.load()
   player.load()
   
   -- add player to motion system
-  entWorld:addEntity(player)
+  systems:addEntity(player)
 
 end
 
 function love.update(dt)
   player.update(dt)
-  entWorld:update(dt)
+  systems:update(dt)
 end
 
 function love.draw()
