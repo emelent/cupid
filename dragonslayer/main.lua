@@ -31,13 +31,20 @@ function debug_print(tag, message)
   end
 end
 
+local function drawCollisions()
+  for _, item in pairs(bumpWorld:getItems()) do
+    love.graphics.rectangle('line', bumpWorld:getRect(item))
+  end
+end
+
+-- love stuff
+
 function love.load()
   -- Prepare world
   bumpWorld = bump.newWorld(50)
 
   -- Setup systems
   local MotionSystem = require('systems.motion')
-  --local GravitySystem = require('systems.motion')
   
   systems =  tiny.world()
   systems:addSystem(MotionSystem)
@@ -66,23 +73,10 @@ end
 
 function love.draw()
   love.graphics.setColor(255,0,255,255)
-  love.graphics.rectangle(
-    'line',
-    ground.hitbox.x,
-    ground.hitbox.y,
-    ground.hitbox.w,
-    ground.hitbox.h
-  )
-  love.graphics.rectangle(
-    'line',
-    player.hitbox.x,
-    player.hitbox.y,
-    player.hitbox.w,
-    player.hitbox.h
-  )
-
-  love.graphics.setColor(255,255,255,255)
+  drawCollisions()
   player.draw()
+  love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
+  love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
 end
 
 function love.keyreleased(key, code)
@@ -95,3 +89,4 @@ end
 function love.keypressed(key, code)
   player.keypressed(key, code)
 end
+

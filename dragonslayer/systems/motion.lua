@@ -1,10 +1,12 @@
 local motion = tiny.processingSystem()
+local gravity = 2000
 
 motion.filter = tiny.requireAll(
   'group',
   'position', 
   'velocity', 
-  'hitbox'
+  'hitbox',
+  'gravity'
 )
 
 function motion:onAdd(ent)
@@ -24,6 +26,11 @@ function motion:onRemove(ent)
 end
 
 function motion:process(ent, dt)
+
+  -- apply gravity 
+  if ent.gravity then
+    ent.velocity.y = ent.velocity.y + (gravity * dt)
+  end
   --update entity hitbox
   bumpWorld:update(
     ent, 
@@ -34,27 +41,38 @@ function motion:process(ent, dt)
   )
 
   --try to move player to destination, and handle collisions
-  local pos = ent.position
-  local filter = function(item, other)
-    return 'touch'
-  end
+    local pos = ent.position
+    local filter = function(item, other)
+      return 'cross'
+    end
 
-  local goalX, goalY = pos.x, pos.y
-  local actualX, actualY, cols, len = bumpWorld:move(ent, goalX, goalY, filter)
+    local goalX, goalY = pos.x, pos.y
+    local actualX, actualY, cols, len = bumpWorld:move(ent, goalX, goalY, filter)
 
-  --set new collision position
-  ent.position.x = actualX
-  ent.position.y = actualY
+    --set new collision position
+      ent.position.x = actualX
+      ent.position.y = actualY
 
-  if len > 0 then
-    debug_print('motion', string.format('Goal => (%s, %s)', goalX, goalY))
-    debug_print('motion', string.format('Actual => (%s, %s)', actualX, actualY))
-  end
-  for i=1, len do
-    debug_print('MotionSysem', ent.group .. ' entity collided with ' .. tostring(cols[i].other.group))
-  end
-  
-    
+      local gravity = true 
+      for i=1, len do
+        print('checking')
+        -- enable gravity if bottom not colliding
+        if cols[i].normal.y ~= -1 then
+          print('no bottom collision')
+        elseif cols[i].normal.y == -1 then
+          gravity = false
+          --align with bottom object
+          print('bottom collision')
+          ent.position.y = cols[i].other.hitbox.y - ent.hitbox.h
+        end
+      end
+      ent.gravity = gravity  
+    -- debug info
+      for i=1, len do
+        debug_print('MotionSysem', ent.group .. ' entity collided with ' .. tostring(cols[i].other.group))
+        debug_print('MotionSysem', 'Vecor normal => ' .. cols[i].normal.x .. ', ' .. cols[i].normal.y)
+
+      end
 end
 
 return motion

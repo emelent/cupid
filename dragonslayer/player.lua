@@ -4,23 +4,23 @@ local player = {
   damageDealt = false,
   dashFactor = 20,
   speed = 150,
-  gravity = true,
+  gravity = false,
   jumpForce = 800,
   ground = 500,
   state = 'idle',
   group = 'Player',
   smAction = state_machine.newFSM(),
-  position = vector(600, 500),
+  position = vector(200, 500),
   velocity = vector(0, 0),
   hitbox = {
-    x = 600 - 48/2,
-    y = 500 - 48/2,
+    x = 200,
+    y = 500,
     w = 48,
     h = 48
   },
   scale= {
-    x = 3,
-    y = 3 
+    x = 1,
+    y = 1 
   },
 }
 
@@ -34,7 +34,7 @@ function player.load()
   local sprite = sodapop.newAnimatedSprite()
   --anchor sprite to player position
   sprite:setAnchor(function() 
-    return player.position.x, player.position.y 
+    return player.position.x + 24*player.scale.x, player.position.y + 24*player.scale.y
   end)
 
   local switchToNextState = function()
@@ -190,10 +190,10 @@ function player.update(dt)
   player.smAction:stateEvent('update', dt)
   player.sprite:update(dt)
   player.position = player.position + (player.velocity * dt)
-  player.hitbox.x = player.position.x - (48/2 * player.scale.x)
-  player.hitbox.y = player.position.y - (48/2 * player.scale.y)
-  player.hitbox.w = player.scale.x * 48
-  player.hitbox.h = player.scale.x * 48
+  player.hitbox.x = player.position.x
+  player.hitbox.y = player.position.y
+  player.hitbox.w = 48 * player.scale.x
+  player.hitbox.h = 48 * player.scale.y
 end
 
 function player.draw()
