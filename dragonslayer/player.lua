@@ -11,6 +11,12 @@ local player = {
   smAction = state_machine.newFSM(),
   position = vector(600, 500),
   velocity = vector(0, 0),
+  hitbox = {
+    x = 600 - 48/2,
+    y = 500 - 48/2,
+    w = 48,
+    h = 48
+  },
   scale= {
     x = 3,
     y = 3 
@@ -180,9 +186,13 @@ function player.load()
 end
 
 function player.update(dt)
-  player.position = player.position + (player.velocity * dt)
-  player.sprite:update(dt)
   player.smAction:stateEvent('update', dt)
+  player.sprite:update(dt)
+  player.position = player.position + (player.velocity * dt)
+  player.hitbox.x = player.position.x - (48/2 * player.scale.x)
+  player.hitbox.y = player.position.y - (48/2 * player.scale.y)
+  player.hitbox.w = player.scale.x * 48
+  player.hitbox.h = player.scale.x * 48
 end
 
 function player.draw()
