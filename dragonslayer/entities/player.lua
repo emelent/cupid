@@ -172,10 +172,14 @@ function player.load()
   player.sprite = sprite
 
 --load states
-  local states = require('player_states')
-  for _, state in pairs(states) do
-    player.smAction:loadState(state, require('player_states.' .. state), {player = player})
-  end
+  local states_dir = 'player_states/'
+  player.smAction:loadState('idle', require(states_dir .. 'idle'), {player = player})
+  player.smAction:loadState('walk', require(states_dir .. 'walk'), {player = player})
+  player.smAction:loadState('slash', require(states_dir .. 'slash'), {player = player})
+  player.smAction:loadState('block', require(states_dir .. 'block'), {player = player})
+  player.smAction:loadState('crouch', require(states_dir .. 'crouch'), {player = player})
+  player.smAction:loadState('jump', require(states_dir .. 'jump'), {player = player})
+  player.smAction:loadState('dash', require(states_dir .. 'dash'), {player = player})
 
   -- start off in idle state
   player.smAction:setState('idle')

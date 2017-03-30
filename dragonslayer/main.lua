@@ -6,69 +6,62 @@ state_machine = require('state_machine')
 tiny = require('lib.tiny')
 
 local bump = require('lib.bump')
-local player = require('player')
+local player = require('entities.player')
 
 
-local systems
+local systemManager
 
 bumpWorld = nil
-local ground = {
-  group = 'Ground',
-  hitbox =  {
-    x = 0,
-    y = 550,
-    w = 500,
-    h = 50
-  }
-}
 
---debug flag
-local debug = true
+--debug stuff 
+--
+  local debug = true
 
-function debug_print(tag, message)
-  if debug then
-    print(string.format('[DEBUG:%s] %s',tag, message))
+  function debug_print(tag, message)
+    if debug then
+      print(string.format('[DEBUG:%s] %s',tag, message))
+    end
   end
-end
 
-local function drawCollisions()
-  for _, item in pairs(bumpWorld:getItems()) do
-    love.graphics.rectangle('line', bumpWorld:getRect(item))
+  local function drawCollisions()
+    for _, item in pairs(bumpWorld:getItems()) do
+      love.graphics.rectangle('line', bumpWorld:getRect(item))
+    end
   end
-end
 
 -- love stuff
 
 function love.load()
   -- Prepare world
   bumpWorld = bump.newWorld(50)
-
-  -- Setup systems
-  local MotionSystem = require('systems.motion')
-  
-  systems =  tiny.world()
-  systems:addSystem(MotionSystem)
+  systemManager =  tiny.world()
 
   -- add ground to world
-  bumpWorld:add(
-    ground, 
-    ground.hitbox.x, 
-    ground.hitbox.y,
-    ground.hitbox.w,
-    ground.hitbox.h
-  )
+  bumpWorld:add('ground', 0, 550, 500, 50)
 
-  -- prepare player
-  player.load()
-  
-  -- add player to motion system
-  systems:addEntity(player)
+  -- Load systems
+    local systems = {}
+    local systemNames= require('systems')
+    for _, name in pairs(systemNames) do
+      systemManager:addSystem(require('systems.' .. name))
+    end
 
+
+  -- Load entities
+    local entityNames =  require('entities')
+    for _, name in pairs(entityNames) do
+      local entity = require('entities.' .. name)  
+      -- load entity
+      entity:load()
+
+      -- add entity to system manager
+      systemManager:addEntity(entity)
+    end
 end
 
 function love.update(dt)
   player.update(dt)
-  systems:update(dt)
+  systemManager:update(dt)
 end
 
 function love.draw()

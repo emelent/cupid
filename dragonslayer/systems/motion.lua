@@ -63,7 +63,8 @@ function motion:process(ent, dt)
           gravity = false
           --align with bottom object
           print('bottom collision')
-          ent.position.y = cols[i].other.hitbox.y - ent.hitbox.h
+          local x,y = bumpWorld:getRect(cols[i].other)
+          ent.position.y = y - ent.hitbox.h
         end
       end
       ent.gravity = gravity  
