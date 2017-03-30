@@ -64,6 +64,9 @@ function motion:process(ent, dt)
           ent.position.y = y - ent.hitbox.h
         end
       end
+      if len == 0 then
+        gravity = true
+      end
       ent.gravity = gravity  
     -- debug info
       for i=1, len do
