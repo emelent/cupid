@@ -5,8 +5,10 @@ vector = require('lib.hump.vector')
 state_machine = require('state_machine')
 tiny = require('lib.tiny')
 
+local sti = require('lib.sti')
 local bump = require('lib.bump')
 local player = require('entities.player')
+local map
 
 bumpWorld = nil
 local systemManager
@@ -30,9 +32,10 @@ local debug = true
 -- love stuff
 
 function love.load()
-  -- Prepare world
+  
   bumpWorld = bump.newWorld(50)
   systemManager =  tiny.world()
+  map = sti('assets/maps/map01.lua')
 
   -- add ground to world
   bumpWorld:add('ground', 0, 550, 500, 50)
@@ -58,16 +61,18 @@ function love.load()
 end
 
 function love.update(dt)
+  map:update(dt)
   player.update(dt)
   systemManager:update(dt)
 end
 
 function love.draw()
-  love.graphics.setColor(255,0,255,255)
-  drawCollisions()
-  player.draw()
-  love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
-  love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
+  map:draw()
+  --love.graphics.setColor(255,0,255,255)
+  --drawCollisions()
+  --player.draw()
+  --love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
+  --love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
 end
 
 function love.keyreleased(key, code)
