@@ -74,13 +74,14 @@ function love.draw()
     -- Translate world so that player is always centred
   local tx = math.floor(player.position.x - screen_width / 2)
   local ty = math.floor(player.position.y - screen_height / 2)
+
+  love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
+  love.graphics.print('Debug: ' .. tostring(debug), 0, 20)
   love.graphics.translate(-tx, -ty)
   love.graphics.scale(scale)
 
   map:draw()
   player.draw()
-  love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
-  love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
   love.graphics.setColor(255,0,255,255)
   --map:bump_draw(bumpWorld)
   if debug then
@@ -92,6 +93,8 @@ end
 function love.keyreleased(key, code)
   if key == 'escape' then
     love.event.quit()
+  elseif key == 'tab' then
+    debug = not debug
   end
   player.keyreleased(key, code)
 end
