@@ -55,7 +55,6 @@ function motion:process(ent, dt)
 
       local gravity = ent.gravity
       for i=1, len do
-        print('checking')
         -- disable gravity if bottom colliding
         if cols[i].normal.y == -1 then
           gravity = false
