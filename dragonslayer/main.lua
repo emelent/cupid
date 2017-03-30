@@ -8,14 +8,12 @@ tiny = require('lib.tiny')
 local bump = require('lib.bump')
 local player = require('entities.player')
 
-
-local systemManager
-
 bumpWorld = nil
+local systemManager
+local debug = true
 
---debug stuff 
---
-  local debug = true
+
+--debug stuff
 
   function debug_print(tag, message)
     if debug then
@@ -50,7 +48,7 @@ function love.load()
   -- Load entities
     local entityNames =  require('entities')
     for _, name in pairs(entityNames) do
-      local entity = require('entities.' .. name)  
+      local entity = require('entities.' .. name)
       -- load entity
       entity:load()
 
