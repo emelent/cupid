@@ -53,16 +53,13 @@ function motion:process(ent, dt)
       ent.position.x = actualX
       ent.position.y = actualY
 
-      local gravity = true 
+      local gravity = ent.gravity
       for i=1, len do
         print('checking')
-        -- enable gravity if bottom not colliding
-        if cols[i].normal.y ~= -1 then
-          print('no bottom collision')
-        elseif cols[i].normal.y == -1 then
+        -- disable gravity if bottom colliding
+        if cols[i].normal.y == -1 then
           gravity = false
           --align with bottom object
-          print('bottom collision')
           local x,y = bumpWorld:getRect(cols[i].other)
           ent.position.y = y - ent.hitbox.h
         end
