@@ -38,9 +38,6 @@ function love.load()
   map = sti('assets/maps/map01.lua', {'bump'})
   map:bump_init(bumpWorld)
 
-  -- add ground to world
-  bumpWorld:add('ground', 0, 550, 500, 50)
-
   -- Load systems
     local systems = {}
     local systemNames= require('systems')
@@ -70,12 +67,12 @@ end
 function love.draw()
   love.graphics.setColor(255,255,255,255)
   map:draw()
-  --player.draw()
-  --love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
-  --love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
+  player.draw()
+  love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
+  love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
   love.graphics.setColor(255,0,255,255)
-  map:bump_draw(bumpWorld)
-  --drawCollisions()
+  --map:bump_draw(bumpWorld)
+  drawCollisions()
 
 end
 
