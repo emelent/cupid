@@ -43,7 +43,7 @@ function motion:process(ent, dt)
   --try to move player to destination, and handle collisions
     local pos = ent.position
     local filter = function(item, other)
-      return 'cross'
+      return 'slide'
     end
 
     local goalX, goalY = pos.x, pos.y
@@ -61,7 +61,7 @@ function motion:process(ent, dt)
           gravity = false
           --align with bottom object
           local x,y = bumpWorld:getRect(cols[i].other)
-          ent.position.y = y - ent.hitbox.h
+          -- ent.position.y = y - ent.hitbox.h
         end
       end
       if len == 0 then
