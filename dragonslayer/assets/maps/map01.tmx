@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-up" width="56" height="24" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-up" width="56" height="24" tilewidth="32" tileheight="32" nextobjectid="11">
  <tileset firstgid="1" name="Tile" tilewidth="32" tileheight="32" tilecount="126">
   <image source="../images/tiles/Tile.png" width="224" height="576"/>
  </tileset>
+ <objectgroup name="Collision">
+  <properties>
+   <property name="collidable" value="1"/>
+  </properties>
+  <object id="4" x="0" y="544" width="160" height="96"/>
+  <object id="5" x="160" y="576" width="672" height="64"/>
+  <object id="6" x="896" y="544" width="256" height="96"/>
+  <object id="7" x="1216" y="544" width="576" height="96"/>
+ </objectgroup>
  <layer name="Tile Layer 1" width="56" height="24">
   <data encoding="base64" compression="zlib">
    eJztzzkKACAMBEDxBf7/tbYWC1qIB8zAdiGblAIAAAD/ayGn+1L3bG41NWTX7nR36huzOvdabv0H3NMBNKQD5w==
   </data>
  </layer>
- <objectgroup name="Collision">
-  <properties>
-   <property name="collidable" value="1"/>
-  </properties>
- </objectgroup>
 </map>

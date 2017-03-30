@@ -8,7 +8,7 @@ return {
   height = 24,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 1,
+  nextobjectid = 11,
   properties = {},
   tilesets = {
     {
@@ -33,6 +33,71 @@ return {
   },
   layers = {
     {
+      type = "objectgroup",
+      name = "Collision",
+      visible = false,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      properties = {
+        ["collidable"] = true
+      },
+      objects = {
+        {
+          id = 4,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 0,
+          y = 544,
+          width = 160,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 5,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 160,
+          y = 576,
+          width = 672,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 6,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 896,
+          y = 544,
+          width = 256,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 7,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 1216,
+          y = 544,
+          width = 576,
+          height = 96,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
+    },
+    {
       type = "tilelayer",
       name = "Tile Layer 1",
       x = 0,
@@ -47,18 +112,6 @@ return {
       encoding = "base64",
       compression = "zlib",
       data = "eJztzzkKACAMBEDxBf7/tbYWC1qIB8zAdiGblAIAAAD/ayGn+1L3bG41NWTX7nR36huzOvdabv0H3NMBNKQD5w=="
-    },
-    {
-      type = "objectgroup",
-      name = "Collision",
-      visible = true,
-      opacity = 1,
-      offsetx = 0,
-      offsety = 0,
-      properties = {
-        ["collidable"] = "1"
-      },
-      objects = {}
     }
   }
 }

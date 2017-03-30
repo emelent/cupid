@@ -35,7 +35,8 @@ function love.load()
   
   bumpWorld = bump.newWorld(50)
   systemManager =  tiny.world()
-  map = sti('assets/maps/map01.lua')
+  map = sti('assets/maps/map01.lua', {'bump'})
+  map:bump_init(bumpWorld)
 
   -- add ground to world
   bumpWorld:add('ground', 0, 550, 500, 50)
@@ -67,12 +68,15 @@ function love.update(dt)
 end
 
 function love.draw()
+  love.graphics.setColor(255,255,255,255)
   map:draw()
-  --love.graphics.setColor(255,0,255,255)
-  --drawCollisions()
   --player.draw()
   --love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
   --love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
+  love.graphics.setColor(255,0,255,255)
+  map:bump_draw(bumpWorld)
+  --drawCollisions()
+
 end
 
 function love.keyreleased(key, code)
