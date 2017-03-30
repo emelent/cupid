@@ -12,7 +12,7 @@ local map
 
 bumpWorld = nil
 local systemManager
-local debug = true
+local debug = false
 
 
 --debug stuff
@@ -72,7 +72,9 @@ function love.draw()
   love.graphics.print('Items: ' .. tostring(bumpWorld:countItems()), 0, 20)
   love.graphics.setColor(255,0,255,255)
   --map:bump_draw(bumpWorld)
-  drawCollisions()
+  if debug then
+    drawCollisions()
+  end
 
 end
 
