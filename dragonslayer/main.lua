@@ -66,6 +66,17 @@ end
 
 function love.draw()
   love.graphics.setColor(255,255,255,255)
+  -- Scale world
+  local scale = 1
+  local screen_width = love.graphics.getWidth() / scale
+  local screen_height = love.graphics.getHeight() / scale
+
+    -- Translate world so that player is always centred
+  local tx = math.floor(player.position.x - screen_width / 2)
+  local ty = math.floor(player.position.y - screen_height / 2)
+  love.graphics.translate(-tx, -ty)
+  love.graphics.scale(scale)
+
   map:draw()
   player.draw()
   love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
