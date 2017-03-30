@@ -25,9 +25,11 @@ local player = {
   },
 }
 
+local block = {}
 function player.load()
   --prepare image
   local image = love.graphics.newImage('assets/images/shadow.png')
+
   -- set image filter
   image:setFilter('nearest', 'nearest')
   player.image = image
@@ -191,7 +193,7 @@ function player.update(dt)
   player.smAction:stateEvent('update', dt)
   player.sprite:update(dt)
   player.position = player.position + (player.velocity * dt)
-  -- local dx, dy = 120 * player.scale.x, 52 * player.scale.y
+
   player.hitbox.x = player.position.x 
   player.hitbox.y = player.position.y 
   player.hitbox.w = player.w * player.scale.x
