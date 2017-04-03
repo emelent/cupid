@@ -12,7 +12,7 @@ local map
 
 bumpWorld = nil
 local systemManager
-local debug = false
+local debug = true 
 
 
 --debug stuff
@@ -51,7 +51,7 @@ function love.load()
     for _, name in pairs(entityNames) do
       local entity = require('entities.' .. name)
       -- load entity
-      entity:load()
+      entity.load()
 
       -- add entity to system manager
       systemManager:addEntity(entity)
@@ -77,11 +77,15 @@ function love.draw()
 
   love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
   love.graphics.print('Debug: ' .. tostring(debug), 0, 20)
+  love.graphics.print(string.format('Player.position: %s, %s', player.position.x, player.position.y), 0, 30)
+  love.graphics.print(string.format('Player.velocity: %s, %s', player.velocity.x, player.velocity.y), 0, 40)
+  love.graphics.print(string.format('Player.hitbox: %s, %s', player.hitbox.x, player.hitbox.y), 0, 50)
   love.graphics.translate(-tx, -ty)
   love.graphics.scale(scale)
 
   map:draw()
   player.draw()
+  love.graphics.rectangle('line', player.hitbox.x, player.hitbox.y, player.hitbox.w, player.hitbox.h)
   love.graphics.setColor(255,0,255,255)
   --map:bump_draw(bumpWorld)
   if debug then

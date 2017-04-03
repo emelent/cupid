@@ -9,20 +9,22 @@ local player = {
   state = 'idle',
   group = 'Player',
   smAction = state_machine.newFSM(),
-  position = vector(200, 400),
+  position = vector(200, 300),
+  center = vector(),
   velocity = vector(0, 0),
-  w = 6,
-  h = 30,
+  w = 48,
+  h = 48,
+  dw = 48,
+  dh = 48,
+  hitboxes = nil,
   hitbox = {
     x = 200,
     y = 400,
     w = 48,
     h = 48
   },
-  scale= {
-    x = 3,
-    y = 3 
-  },
+  sx = 3,
+  sy = 3,
 }
 
 local block = {}
@@ -37,7 +39,7 @@ function player.load()
   local sprite = sodapop.newAnimatedSprite()
   --anchor sprite to player position
   sprite:setAnchor(function() 
-    return player.position.x + 3*player.scale.y, player.position.y + 14*player.scale.y
+    return player.center.x, player.center.y
   end)
 
   local switchToNextState = function()
@@ -171,9 +173,18 @@ function player.load()
 
 
 --set image scale
-  sprite.sx = player.scale.x
-  sprite.sy = player.scale.y
+  sprite.sx = player.sx
+  sprite.sy = player.sy
   player.sprite = sprite
+  player.hitboxes = require('hitboxes.player_hitbox')
+  player.hitbox_name = 'default'
+  local hb = player.hitboxes[player.hitbox_name]
+  player.hitbox = {
+    x = player.position.x + (hb.x * player.sx),
+    y = player.position.y + (hb.y * player.sy),
+    w = hb.width * player.sx,
+    h = hb.height * player.sy
+  }
 
 --load states
   local states_dir = 'player_states/'
@@ -190,14 +201,16 @@ function player.load()
 end
 
 function player.update(dt)
-  player.smAction:stateEvent('update', dt)
-  player.sprite:update(dt)
   player.position = player.position + (player.velocity * dt)
 
-  player.hitbox.x = player.position.x 
-  player.hitbox.y = player.position.y 
-  player.hitbox.w = player.w * player.scale.x
-  player.hitbox.h = player.h * player.scale.y
+  player.center.x = player.position.x + (player.dw/2)
+  player.center.y = player.position.y + (player.dh/2)
+
+  player.dw = player.w * player.sx
+  player.dh = player.h * player.sy
+
+  player.smAction:stateEvent('update', dt)
+  player.sprite:update(dt)
 end
 
 function player.draw()
@@ -207,6 +220,15 @@ end
 
 function player.keypressed(key, code)
   player.smAction:stateEvent('keypressed', key, code)
+  if key == 'k' then
+    player.position.y = player.position.y + 10
+  elseif key == 'i' then
+    player.position.y = player.position.y - 10
+  elseif key == 'l' then
+    player.position.x = player.position.x + 10
+  elseif key == 'j' then
+    player.position.x = player.position.x - 10
+  end
 end
 
 function player.keyreleased(key, code)
