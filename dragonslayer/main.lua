@@ -6,13 +6,15 @@ state_machine = require('state_machine')
 tiny = require('lib.tiny')
 
 local sti = require('lib.sti')
-local bump = require('lib.bump')
+local hc = require('lib.hc')
 local player = require('entities.player')
 local map
 
-bumpWorld = nil
 local systemManager
 local debug = true 
+
+collider = hc.new()
+collidables = {}
 
 
 --debug stuff
@@ -24,20 +26,34 @@ local debug = true
   end
 
   local function drawCollisions()
-    for _, item in pairs(bumpWorld:getItems()) do
-      love.graphics.rectangle('line', bumpWorld:getRect(item))
+    for _, item in pairs(collidables) do
+      item:draw('line')
     end
   end
 
--- love stuff
+function printKeys(tbl)
+  for k, v in pairs(tbl) do
+    print(k)
+  end
+  print()
+end
+local function loadMapCollidables(map, collider)
+  local layer = map.layers['Collision']
+  printKeys(layer)
+  for k, obj in pairs(layer.objects) do
+    if obj.shape == 'rectangle' then
+      collidables[k] = collider:rectangle(obj.x, obj.y, obj.width, obj.height) 
+    end
+  end
+end
 
+-- love stuff
 function love.load()
   
-  bumpWorld = bump.newWorld(50)
   systemManager =  tiny.world()
-  map = sti('assets/maps/map01.lua', {'bump'})
-  map:bump_init(bumpWorld)
-
+  map = sti('assets/maps/map01.lua')
+  -- load map objects 
+  loadMapCollidables(map, collider) 
   -- Load systems
     local systems = {}
     local systemNames= require('systems')
@@ -85,9 +101,7 @@ function love.draw()
 
   map:draw()
   player.draw()
-  love.graphics.rectangle('line', player.hitbox.x, player.hitbox.y, player.hitbox.w, player.hitbox.h)
-  love.graphics.setColor(255,0,255,255)
-  --map:bump_draw(bumpWorld)
+  love.graphics.setColor(255,0,255)
   if debug then
     drawCollisions()
   end

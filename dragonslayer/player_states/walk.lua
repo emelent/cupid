@@ -32,8 +32,8 @@ function walk.keypressed(key, code)
   elseif key == 'down' then
   elseif key == 's' then
     fsm:setState('crouch')
-  elseif key == 'w' and not player.gravity then
-    fsm:setState('jump')
+  elseif key == 'w' then
+    player.jump()
 	end
 end
 

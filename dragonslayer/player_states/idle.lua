@@ -36,8 +36,8 @@ function idle.keypressed(key, code)
   	fsm:setState('walk', {direction = 1})
   elseif key == 's' then
     fsm:setState('crouch')
-  elseif key == 'w' and not player.gravity then
-    fsm:setState('jump')
+  elseif key == 'w' then
+    player.jump()
 
 
   elseif key == 'up' then

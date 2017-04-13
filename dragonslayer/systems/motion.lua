@@ -1,90 +1,68 @@
 local motion = tiny.processingSystem()
-local gravity = 2000
+local GRAVITY = 2000
 
 motion.filter = tiny.requireAll(
   'group',
   'position', 
   'velocity', 
   'hitbox',
-  'gravity'
+  'gravity',
+  'reloadHb'
 )
+
+local function addHitbox(ent)
+  local hb = ent.hitbox
+  collidables[ent] = collider:rectangle(hb.x, hb.y, hb.w, hb.h)
+end
+
+local function removeHitbox(ent)
+  collider:remove(collidables[ent])
+end
 
 function motion:onAdd(ent)
   --add entity to physics world
-  bumpWorld:add(
-    ent, 
-    ent.hitbox.x,
-    ent.hitbox.y,
-    ent.hitbox.w,
-    ent.hitbox.h
-  )
+  if collidables[ent]  == nil then
+    addHitbox(ent)
+  end
 end
 
 function motion:onRemove(ent)
   --remove entity from physics world
-  bumpWorld:remove(ent)
+  removeHitbox(ent)
+end
+
+function motion:reloadHitbox(ent)
+  removeHitbox(ent)
+  addHitbox(ent)
+  ent.reloadHb = false
 end
 
 function motion:process(ent, dt)
-
+  if ent.reloadHb then
+    self:reloadHitbox(ent)
+  end
   -- apply gravity 
   if ent.gravity then
-    ent.velocity.y = ent.velocity.y + (gravity * dt)
+    ent.velocity.y = ent.velocity.y + (GRAVITY * dt)
   end
+
   --update entity hitbox
-  bumpWorld:update(
-    ent, 
-    ent.hitbox.x,
-    ent.hitbox.y,
-    ent.hitbox.w,
-    ent.hitbox.h
-  )
+  local collidable = collidables[ent]
+  collidable:moveTo(ent.hitbox.x, ent.hitbox.y)
 
   --try to move ent to destination, and handle collisions
-    local pos = ent.position
-    local filter = function(item, other)
-      return 'cross'
+  local collisions = collider:collisions(collidable)
+  local enableGravity = true
+  for other, delta in pairs(collisions) do
+    ent.setPosition((ent.position + delta):unpack())
+
+    --disable gravity if object bottom is colliding with something
+    if delta.y < 0 then
+      ent.velocity.y = 0
+      enableGravity = false
     end
-
-    local goalX, goalY = pos.x, pos.y
-    local actualX, actualY, cols, len = bumpWorld:move(ent, goalX, goalY, filter)
-
-    --set new collision position
-      ent.position.x = actualX
-      ent.position.y = actualY
-      local hb = ent.hitboxes[ent.hitbox_name]
-      ent.hitbox.x = ent.position.x + (hb.x * ent.sx)
-      ent.hitbox.y = ent.position.y + (hb.y * ent.sy)
-
-      local gravity = ent.gravity
-      for i=1, len do
-        -- disable gravity if bottom colliding
-        if cols[i].normal.y == 1 then
-          print('disabling gravity')
-          gravity = false
-          --align with bottom object
-          local x,y = bumpWorld:getRect(cols[i].other)
-          ent.velocity.y = 0
-          ent.position.y = ent.position.y - 1
-          ent.hitbox.y = ent.hitbox.y - 1
-        end
-      end
-      --if len == 0 then
-        --gravity = true
-      --end
-      ent.gravity = gravity  
-    -- debug info
-      for i=1, len do
-        debug_print('MotionSysem', 'Vecor normal => ' .. cols[i].normal.x .. ', ' .. cols[i].normal.y)
-      end
-
-      bumpWorld:update(
-        ent, 
-        ent.hitbox.x,
-        ent.hitbox.y,
-        ent.hitbox.w,
-        ent.hitbox.h
-      )
+  end
+  ent.gravity = enableGravity
 end
 
 return motion

@@ -17,11 +17,13 @@ function crouch.enter(prev_state, ...)
   -- stop player motion
   player.direction = 0
 	player.sprite:switch('crouch')
+  player.setHitbox('crouch')
 end
 
 function crouch.exit()
 	crouch.next_args = {}
 	crouch.next_state = 'idle'
+  player.setHitbox('default')
 end
 
 function crouch.keyreleased(key, code)

@@ -17,7 +17,7 @@ function jump.enter(prev_state, ...)
 	local params = ...
 	player.sprite:switch('jump')
   player.velocity.y = -player.jumpForce
-  player.gravity = true
+  player.gravity = true 
 end
 
 function jump.exit()
@@ -31,7 +31,7 @@ function jump.update(dt)
   player.velocity.x = (player.direction * player.speed)
 
   -- if player lands switch state
-  if not player.gravity then
+  if not player.isAirborne() then
     if player.direction == 0 then
       fsm:setState('idle')
     else

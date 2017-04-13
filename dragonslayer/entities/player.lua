@@ -5,24 +5,22 @@ local player = {
   dashFactor = 20,
   speed = 200,
   gravity = true,
+  reloadHb = false,
   jumpForce = 800,
   state = 'idle',
   group = 'Player',
   smAction = state_machine.newFSM(),
-  position = vector(200, 300),
-  center = vector(),
+  position = vector(0, 0),
+  center = vector(0,0),
   velocity = vector(0, 0),
   w = 48,
   h = 48,
   dw = 48,
   dh = 48,
+  hb = nil,
   hitboxes = nil,
-  hitbox = {
-    x = 200,
-    y = 400,
-    w = 48,
-    h = 48
-  },
+  hb = nil,
+  hitbox = nil,
   sx = 3,
   sy = 3,
 }
@@ -38,7 +36,7 @@ function player.load()
 
   local sprite = sodapop.newAnimatedSprite()
   --anchor sprite to player position
-  sprite:setAnchor(function() 
+  sprite:setAnchor(function()
     return player.center.x, player.center.y
   end)
 
@@ -46,7 +44,7 @@ function player.load()
     --if there is a next state switch to it
     if player.smAction.current_state.next_state then
       player.smAction:setState(
-        player.smAction.current_state.next_state, 
+        player.smAction.current_state.next_state,
         player.smAction.current_state.next_args
       )
     end
@@ -141,7 +139,7 @@ function player.load()
     frameWidth = 48,
     frameHeight = 48,
     stopAtEnd = true,
-    onReachedEnd = function() 
+    onReachedEnd = function()
       --go to idle after blocking damage
       player.smAction:setState('idle')
       player.damageDealt = false
@@ -177,14 +175,10 @@ function player.load()
   sprite.sy = player.sy
   player.sprite = sprite
   player.hitboxes = require('hitboxes.player_hitbox')
-  player.hitbox_name = 'default'
-  local hb = player.hitboxes[player.hitbox_name]
-  player.hitbox = {
-    x = player.position.x + (hb.x * player.sx),
-    y = player.position.y + (hb.y * player.sy),
-    w = hb.width * player.sx,
-    h = hb.height * player.sy
-  }
+
+  printKeys(player.hitboxes)
+--set player position
+  player.setPosition(200, 300)
 
 --load states
   local states_dir = 'player_states/'
@@ -198,19 +192,51 @@ function player.load()
 
   -- start off in idle state
   player.smAction:setState('idle')
+  player.setHitbox('default')
+end
+
+function player.setHitbox(hbName)
+  print('setting hitbox pos')
+  player.hb = player.hitboxes[hbName]
+  local x = player.hb.x * player.sx
+  local y = player.hb.y * player.sy
+  local w  = player.hb.width * player.sx
+  local h = player.hb.height * player.sy
+
+  player.hitbox = {
+    x = x,
+    y = y,
+    w = w,
+    h = h
+  }
+  player.reloadHb = true
+end
+
+function player.isAirborne()
+  return player.velocity.y ~= 0
+end
+
+function player.jump()
+  player.smAction:setState('jump')
+end
+
+function player.setPosition(x, y)
+  player.position.x = x
+  player.position.y = y
+  player.center.x = x + (player.dw/2)
+  player.center.y = y + (player.dh/2)
+
+  --update hitbox position
+  if player.hitbox ~= nil then
+    player.hitbox.x, player.hitbox.y = player.center:unpack() 
+  end
 end
 
 function player.update(dt)
-  player.position = player.position + (player.velocity * dt)
-
-  player.center.x = player.position.x + (player.dw/2)
-  player.center.y = player.position.y + (player.dh/2)
-
-  player.dw = player.w * player.sx
-  player.dh = player.h * player.sy
-
+  player.setPosition((player.position + (player.velocity * dt)):unpack())
   player.smAction:stateEvent('update', dt)
   player.sprite:update(dt)
+
 end
 
 function player.draw()
