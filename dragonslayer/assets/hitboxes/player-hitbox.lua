@@ -27,11 +27,11 @@ return {
           type = "body",
           shape = "rectangle",
           x = 21,
-          y = 11,
+          y = 10,
           width = 6,
-          height = 29,
+          height = 30,
           rotation = 0,
-          visible = true,
+          visible = false,
           properties = {}
         },
         {
@@ -40,7 +40,7 @@ return {
           type = "body",
           shape = "rectangle",
           x = 21,
-          y = 20,
+          y = 12,
           width = 6,
           height = 20,
           rotation = 0,
@@ -52,7 +52,7 @@ return {
     {
       type = "objectgroup",
       name = "Combat",
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -85,6 +85,17 @@ return {
           properties = {}
         }
       }
+    },
+    {
+      type = "imagelayer",
+      name = "Image Layer 1",
+      x = 0,
+      y = -488,
+      visible = true,
+      opacity = 1,
+      image = "../images/shadow.png",
+      transparentcolor = "#000100",
+      properties = {}
     }
   }
 }

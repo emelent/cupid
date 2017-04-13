@@ -196,12 +196,15 @@ function player.load()
 end
 
 function player.setHitbox(hbName)
-  print('setting hitbox pos')
   player.hb = player.hitboxes[hbName]
   local x = player.hb.x * player.sx
   local y = player.hb.y * player.sy
   local w  = player.hb.width * player.sx
   local h = player.hb.height * player.sy
+
+  debug_print(string.format('hb => (%s, %s, %s, %s)', 
+    x, y, w, h
+  ))
 
   player.hitbox = {
     x = x,
@@ -228,7 +231,8 @@ function player.setPosition(x, y)
 
   --update hitbox position
   if player.hitbox ~= nil then
-    player.hitbox.x, player.hitbox.y = player.center:unpack() 
+    player.hitbox.x = player.center.x + (player.hb.x * player.sx)
+    player.hitbox.y = player.center.y + (player.hb.y * player.sy)
   end
 end
 

@@ -1,15 +1,15 @@
 return {
   default = {
     type = "body",
-    x = 21,
-    y = 11,
+    x = 0,
+    y = 1,
     width = 6,
-    height = 29,
+    height = 30,
   },
   crouch = {
     type = "body",
-    x = 21,
-    y = 20,
+    x = 0,
+    y = 6,
     width = 6,
     height = 20,
   },
