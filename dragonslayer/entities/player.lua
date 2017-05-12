@@ -1,3 +1,10 @@
+
+--Player = Class{
+    --init = function(self, pos, img)
+        --self.pos = pos
+        --self.img = img
+    --end,
+--}
 local player = {
   image = nil,
   direction = 0,
