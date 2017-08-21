@@ -19,105 +19,109 @@ collidables = {}
 
 --debug stuff
 
-  function debug_print(tag, message)
-    if debug then
-      print(string.format('[DEBUG:%s] %s',tag, message))
-    end
-  end
+	function debug_print(tag, message)
+		if debug then
+			print(string.format('[DEBUG:%s] %s',tag, message))
+		end
+	end
 
-  local function drawCollisions()
-    for _, item in pairs(collidables) do
-      item:draw('line')
-    end
-  end
+	local function drawCollisions()
+		for _, item in pairs(collidables) do
+			item:draw('line')
+		end
+	end
 
 function printKeys(tbl)
-  for k, v in pairs(tbl) do
-    print(k)
-  end
-  print()
+	for k, v in pairs(tbl) do
+		print(k)
+	end
+	print()
 end
 local function loadMapCollidables(map, collider)
-  local layer = map.layers['Collision']
-  printKeys(layer)
-  for k, obj in pairs(layer.objects) do
-    if obj.shape == 'rectangle' then
-      collidables[k] = collider:rectangle(obj.x, obj.y, obj.width, obj.height) 
-    end
-  end
+	local layer = map.layers['Collision']
+	printKeys(layer)
+	for k, obj in pairs(layer.objects) do
+		if obj.shape == 'rectangle' then
+			collidables[k] = collider:rectangle(obj.x, obj.y, obj.width, obj.height) 
+		end
+	end
 end
 
 -- love stuff
 function love.load()
-  
-  systemManager =  tiny.world()
-  map = sti('assets/maps/map01.lua')
-  -- load map objects 
-  loadMapCollidables(map, collider) 
-  -- Load systems
-    local systems = {}
-    local systemNames= require('systems')
-    for _, name in pairs(systemNames) do
-      systemManager:addSystem(require('systems.' .. name))
-    end
+	
+	systemManager =  tiny.world()
+	map = sti('assets/maps/map01.lua')
+	-- load map objects 
+	loadMapCollidables(map, collider) 
+	-- Load systems
+		local systems = {}
+		local systemNames= require('systems')
+		for _, name in pairs(systemNames) do
+			systemManager:addSystem(require('systems.' .. name))
+		end
 
 
-  -- Load entities
-    local entityNames =  require('entities')
-    for _, name in pairs(entityNames) do
-      local entity = require('entities.' .. name)
-      -- load entity
-      entity.load()
+	-- Load entities
+		local entityNames =  require('entities')
+		for _, name in pairs(entityNames) do
+			local entity = require('entities.' .. name)
+			-- load entity
+			entity.load()
 
-      -- add entity to system manager
-      systemManager:addEntity(entity)
-    end
+			-- add entity to system manager
+			systemManager:addEntity(entity)
+		end
 end
 
 function love.update(dt)
-  map:update(dt)
-  player.update(dt)
-  systemManager:update(dt)
+	map:update(dt)
+	player.update(dt)
+	systemManager:update(dt)
 end
 
 function love.draw()
-  love.graphics.setColor(255,255,255,255)
-  -- Scale world
-  local scale = 1
-  local screen_width = love.graphics.getWidth() / scale
-  local screen_height = love.graphics.getHeight() / scale
+	love.graphics.setColor(155,155,155,255)
 
-    -- Translate world so that player is always centred
-  local tx = math.floor(player.position.x - screen_width / 2)
-  local ty = math.floor(player.position.y - screen_height / 2)
+	love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-  love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
-  love.graphics.print('Debug: ' .. tostring(debug), 0, 20)
-  love.graphics.print(string.format('Player.position: %s, %s', player.position.x, player.position.y), 0, 30)
-  love.graphics.print(string.format('Player.velocity: %s, %s', player.velocity.x, player.velocity.y), 0, 40)
-  love.graphics.print(string.format('Player.hitbox: %s, %s', player.hitbox.x, player.hitbox.y), 0, 50)
-  love.graphics.translate(-tx, -ty)
-  love.graphics.scale(scale)
+	love.graphics.setColor(0,0,0,255)
+	-- Scale world
+	local scale = 1
+	local screen_width = love.graphics.getWidth() / scale
+	local screen_height = love.graphics.getHeight() / scale
 
-  map:draw()
-  player.draw()
-  love.graphics.setColor(255,0,255)
-  if debug then
-    drawCollisions()
-  end
+		-- Translate world so that player is always centred
+	local tx = math.floor(player.position.x - screen_width / 2)
+	local ty = math.floor(player.position.y - screen_height / 2)
+
+	love.graphics.print('Gravity: ' .. tostring(player.gravity), 0, 0)
+	love.graphics.print('Debug: ' .. tostring(debug), 0, 20)
+	love.graphics.print(string.format('Player.position: %s, %s', player.position.x, player.position.y), 0, 30)
+	love.graphics.print(string.format('Player.velocity: %s, %s', player.velocity.x, player.velocity.y), 0, 40)
+	love.graphics.print(string.format('Player.hitbox: %s, %s', player.hitbox.x, player.hitbox.y), 0, 50)
+	love.graphics.translate(-tx, -ty)
+	love.graphics.scale(scale)
+
+	map:draw()
+	player.draw()
+	love.graphics.setColor(255,0,255)
+	if debug then
+		drawCollisions()
+	end
 
 end
 
 function love.keyreleased(key, code)
-  if key == 'escape' then
-    love.event.quit()
-  elseif key == 'tab' then
-    debug = not debug
-  end
-  player.keyreleased(key, code)
+	if key == 'escape' then
+		love.event.quit()
+	elseif key == 'tab' then
+		debug = not debug
+	end
+	player.keyreleased(key, code)
 end
 
 function love.keypressed(key, code)
-  player.keypressed(key, code)
+	player.keypressed(key, code)
 end
 
