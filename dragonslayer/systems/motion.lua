@@ -60,6 +60,10 @@ function motion:process(ent, dt)
     if delta.y < 0 then
       ent.velocity.y = 0
       enableGravity = false
+	-- enable gravity if object hits top
+	elseif delta.y > 0 then
+		ent.velocity.y = 0
+		enableGravity = true
     end
   end
   ent.gravity = enableGravity
