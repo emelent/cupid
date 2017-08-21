@@ -4,6 +4,7 @@ timer = require('lib.hump.timer')
 vector = require('lib.hump.vector')
 state_machine = require('state_machine')
 tiny = require('lib.tiny')
+Class = require('lib.hump.class')
 
 local sti = require('lib.sti')
 local hc = require('lib.hc')
